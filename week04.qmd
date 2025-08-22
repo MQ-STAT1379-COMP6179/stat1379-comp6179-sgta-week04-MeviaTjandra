@@ -14,49 +14,53 @@ library(tidyverse)
 library(babynames)
 ```
 
+# Pre-SGTA Work
 
+## Working with Data in R
 
-# Pre-SGTA Work  
+### Understanding Data Types and Structures
 
-## Working with Data in R  
+Load the `tidyverse` library and explore different R data types by running the code below.
+For each block, **predict the output before running it** and observe what `typeof()`, `class()`, and `str()` tell you.
 
-### Understanding Data Types and Structures  
-
-Load the `tidyverse` library and explore different R data types by running the code below. For each block, **predict the output before running it** and observe what `typeof()`, `class()`, and `str()` tell you.
-
-#### Atomic Vectors - Doubles  
+#### Atomic Vectors - Doubles
 
 ```{r atomic-vectors-doubles, eval=FALSE}
 library(tidyverse)
-x <- c(1, 2, 3, 4, 5, 6)
+x <- c(1, 2, 3, 4, 5, 6) #gives x vectors
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "double" R stores numbers as double-precision by default
+class(x) # "numeric"
+str(x) # "shows structure: num[1:6] 1 2 3 4 5 6
 
 x <- 1:6
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "integer" - colon operator creates integers
+class(x) # "integer"
+str(x) # int [1:6] 1 2 3 4 5 6 
 
 x <- seq(1, 6, len = 6)
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "double" seq() creates doubles by default
+class(x) # "numeric"
+str(x) # num [1:6] 1 2 3 4 5 6 
 ```
 
 **Your observations:**
 
-- What differences do you notice between these three ways of creating vectors?
-- Why might `typeof()` give different results?
+-   What differences do you notice between these three ways of creating vectors?
 
-*Write your thoughts here:*
+-   Why might `typeof()` give different results?
 
+-   R stores numbers as doubles by default
 
+-   The : operator creates integers
 
-#### Atomic Vectors - Integers  
+-   c() combines values into a vector
+
+-   typeof() shows internal storage, class() shows object class
+
+#### Atomic Vectors - Integers
 
 ```{r atomic-vectors-integers, eval=FALSE}
 x <- c(1L, 2L, 3L, 4L, 5L, 6L)
@@ -64,52 +68,60 @@ x
 typeof(x)
 class(x)
 str(x)
+#will produce integer elements
 
 x <- c(1, 2, 3, 4, 5L, 6L)
 x
 typeof(x)
 class(x)
 str(x)
+#mixing integers and doubles result in doubles
 
 x <- as.integer(x)
 x
 typeof(x)
 class(x)
 str(x)
+#will produce integers - explicit conversion to integer
 ```
 
 **Your observations:**
 
-- What happens when you mix integers and doubles in a vector?
-- What does the `L` suffix do?
+-   What happens when you mix integers and doubles in a vector?
+-   What does the `L` suffix do?
 
 *Write your thoughts here:*
 
+-   use of L suffix to create integers
 
+-   mixing types result in coercion to the most flexible type
 
-#### Atomic Vectors - Characters  
+-   as.integer() explicitly converts to integer type
+
+#### Atomic Vectors - Characters
 
 ```{r atomic-vectors-characters, eval=FALSE}
 x <- "This"
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "character"
+class(x) # "character"
+str(x) # chr "This"
 
 x <- c("This", "unit", "is", "great.", "Do", "you", "agree?")
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "character"
+class(x) # "character"
+str(x) # chr [1:7] "This" "unit" "is" "great." ...
 
 x <- paste("This", "unit", "is", "great.", "Do", "you", "agree?", sep = "::")
+# "This::unit::is::great.::Do::you::agree?"
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # character
+class(x) # character
+str(x) # chr "This::unit::is::great.::Do::you::agree?"
 
 x <- paste("This", "unit", "is", "great.", "Do", "you", "agree?", sep = " ")
-x
+x # [1] "This unit is great. Do you agree?"
 typeof(x)
 class(x)
 str(x)
@@ -126,41 +138,47 @@ glue::glue("This unit is great.
 
 **Your task:**
 
-- Compare the different methods for combining strings
-- What's the difference between `paste()`, `cat()`, and `glue()`?
+-   Compare the different methods for combining strings
+-   What's the difference between `paste()`, `cat()`, and `glue()`?
 
 *Write your analysis here:*
 
+-   characters are enclosed in quotes
 
+-   paste() combines strings with separator
 
-#### Atomic Vectors - Logicals  
+-   cat() prints to console without quotes
+
+-   glue() provides modern string interpolation
+
+#### Atomic Vectors - Logicals
 
 ```{r atomic-vectors-logicals, eval=FALSE, error=TRUE}
-1 > 0
-1 < 0
-1 <- 1  # This will cause an error - why?
-1 == 1
+1 > 0 # TRUE
+1 < 0 # FALSE
+1 <- 1  # This will cause an error - <- is assignment not comparison
+1 == 1 # TRUE - use == for equality testing
 
 x <- c(TRUE, TRUE, FALSE)
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "logical"
+class(x) # "logical"
+str(x) # logi [1:3] TRUE TRUE FALSE
 
-x <- c(T, T, F)
+x <- c(T, T, F) # shorthand notation
 x
-typeof(x)
-class(x)
-str(x)
+typeof(x) # "logical"
+class(x) # "logical"
+str(x) # logi [1:3] TRUE TRUE FALSE
 
-x <- 1 > 0
-x
-typeof(x)
-class(x)
-str(x)
+x <- 1 > 0 #single logical value
+x # [1] TRUE
+typeof(x) # "logical"
+class(x) # "logical"
+str(x) # logi TRUE
 
-x <- c(1 > 0, 5 > 0, 5 > 10)
-x
+x <- c(1 > 0, 5 > 0, 5 > 10) # vector of logical comparisons
+x # [1] TRUE TRUE FALSE
 typeof(x)
 class(x)
 str(x)
@@ -168,67 +186,92 @@ str(x)
 
 **Your task:**
 
-- Explain why `1 <- 1` causes an error
-- What's the difference between `=` and `==`?
+-   Explain why `1 <- 1` causes an error
+-   What's the difference between `=` and `==`?
 
 *Write your explanation here:*
 
+-   use == for equality, \<- for assignment
 
+-   Logical values: TRUE/FALSE or T/F
 
-#### Factors  
+-   Comparisons return logical vectors
+
+-   Common mistake: using = instead of == for comparison
+
+#### Factors
 
 ```{r factors, eval=FALSE}
 x <- c("spring", "spring", "winter", "spring", "winter", "spring", "spring")
+# character vector
 x
 typeof(x)
 class(x)
 str(x)
-attributes(x)
+attributes(x) # NULL
 
 x <- factor(c("spring", "spring", "winter", "spring", "winter", "spring", "spring"))
+# Factor (categorical variable)
+#Levels: spring winter
 x
-typeof(x)
-class(x)
-str(x)
-attributes(x)
-table(x)
-as.character(x)
+typeof(x) # "integer" - factors stored as integer internally
+class(x) # "factor"
+str(x) # Factor w/ 2 levels "spring","winter": 1 1 2 1 2 1 1
+attributes(x) # Shows levels and class
+table(x) # spring winter
+as.character(x) #converts back to character vector
 ```
 
 **Your analysis:**
 
-- How are factors different from character vectors?
+-   How are factors different from character vectors?
 
 *Write your thoughts here:*
 
+-   Factors represent categorical data
 
+-   Stored as integers with labels (levels)
 
-### Working with Matrices and Arrays  
+-   Useful for statistical analysis and plotting
 
-#### Matrices  
+-   table() counts occurrences of each level
+
+### Working with Matrices and Arrays
+
+#### Matrices
 
 ```{r matrices, eval=FALSE}
 m <- matrix(1:6, nrow = 2)
-str(m)
-class(m)
-m
+str(m) # int [1:2, 1:3] 1 2 3 4 5 6
+class(m) # [1] "matrix" "array"
+m #.     [,1] [,2] [,3]
+  # [1,].  1    3    5
+  # [2,].  2    4    6
 
 m <- matrix(1:6, nrow = 2, byrow = TRUE)
-str(m)
-class(m)
-m
+str(m) # int [1:2, 1:3] 1 4 2 5 3 6
+class(m) # [1] "matrix" "array"
+m #      [,1] [,2] [,3]
+  # [1,].  1    2    3
+  # [2,].  4    5    6
 ```
 
 **Your task:**
 
-- Explain the difference between the two matrix creations above
-- How does R fill matrices by default?
+-   Explain the difference between the two matrix creations above
+-   How does R fill matrices by default?
 
 *Write your answer here:*
 
+-   Matrices are 2-dimensional arrays
 
+-   Default filling is by columns
 
-#### Arrays  
+-   Use byrow = TRUE to fill by rows
+
+-   All elements must be the same type
+
+#### Arrays
 
 ```{r arrays, eval=FALSE}
 x <- array(c(1:5, 11:15), dim = c(5, 5))
@@ -255,14 +298,20 @@ x
 
 **Your task:**
 
-- What happens when you don't provide enough values for an array?
-- How do 3-dimensional arrays work?
+-   What happens when you don't provide enough values for an array?
+-   How do 3-dimensional arrays work?
 
 *Write your explanation here:*
 
+-   Arrays can have multiple dimensions
 
+-   R recycles values if not enough provided
 
-### Working with Lists  
+-   3D arrays useful for time series or panel data
+
+-   All elements must be same type
+
+### Working with Lists
 
 ```{r lists, eval=FALSE}
 x <- list(1:5, 11:15, c("a", "b", "c"))
@@ -283,14 +332,20 @@ x
 
 **Your task:**
 
-- How are lists different from vectors?
-- What are the advantages of named lists?
+-   How are lists different from vectors?
+-   What are the advantages of named lists?
 
 *Write your analysis here:*
 
+-   Lists can contain different data types
 
+-   Use names for easier access
 
-### Working with Data Frames and Tibbles  
+-   Lists can be nested (lists within lists)
+
+-   Essential for storing complex data structures
+
+### Working with Data Frames and Tibbles
 
 ```{r data-frames, eval=FALSE}
 # Traditional data frame
@@ -301,11 +356,11 @@ x <- data.frame(
   temperature = c(14, 17, 26, 25)
 )
 str(x)
-typeof(x)
-class(x)
+typeof(x) # "list"
+class(x) # "data.frame"
 x
 
-# Modern tibble
+# Modern tibble - Better printing and behaviour
 x <- tibble(
   season = c("winter", "winter", "spring", "spring"),
   month = c("Jan", "Feb", "Apr", "Apr"), 
@@ -313,11 +368,11 @@ x <- tibble(
   temperature = c(14, 17, 26, 25)
 )
 str(x)
-typeof(x)
-class(x)
+typeof(x) # "list"
+class(x) # [1] "tbl_df" "tbl" "data.frame"
 x
 
-# Tribble (transposed tibble for readability)
+# Tribble (transposed tibble for better readability)
 x <- tribble(
   ~season, ~month, ~station, ~temperature,
   "winter", "Jan", "Sydney", 14,
@@ -325,26 +380,33 @@ x <- tribble(
   "spring", "Apr", "Sydney", 26,
   "spring", "Apr", "Newcastle", 25
 )
-glimpse(x)
-typeof(x)
-class(x)
+glimpse(x) # Compact view of structure
+typeof(x) # "list"
+class(x) # [1] "tbl_df" "tbl" "data.frame"
 x
 ```
 
 **Your analysis:**
 
-- What are the differences between data frames and tibbles?
-- When would you use `tribble()` instead of `tibble()`?
+-   What are the differences between data frames and tibbles?
+-   When would you use `tribble()` instead of `tibble()`?
 
 *Write your thoughts here:*
 
+-   Data frames are special lists with equal length columns
 
+-   Tibbles are modern data frames with better behaviour
 
-## Loading and Saving Data  
+-   tribble() allows row-wise input for readability
 
-Download the `test.csv` file from iLearn and place it in a `data` subfolder within your working directory. We'll then load the file using `read_csv()` and explore the available options.
+-   glimpse() shows compact data structure
 
-### Reading Data  
+## Loading and Saving Data
+
+Download the `test.csv` file from iLearn and place it in a `data` subfolder within your working directory.
+We'll then load the file using `read_csv()` and explore the available options.
+
+### Reading Data
 
 ```{r loading-data, eval=FALSE}
 # Load CSV file
@@ -364,14 +426,24 @@ waldo::compare(x, x_delim)
 
 **Your task:**
 
-- What information does `glimpse()` provide that `str()` doesn't?
-- Are there any differences between `read_csv()` and `read_delim()` results?
+-   What information does `glimpse()` provide that `str()` doesn't?
+-   Are there any differences between `read_csv()` and `read_delim()` results?
 
 *Write your observations here:*
 
+-   glimpse() is a more compact version of str()
 
+<!-- -->
 
-### Writing Data  
+-   read_csv() is specialised for CSV files
+
+-   read_delim() is more general with specified delimiter
+
+-   Both create tibbles by default
+
+-   Use help('read_csv') to explore options
+
+### Writing Data
 
 ```{r writing-data, eval=FALSE}
 # Create sample data
@@ -396,16 +468,24 @@ waldo::compare(weather_data, weather_check)
 
 **Your task:**
 
-- After running this code, check your `data` folder - what file was created?
-- Why is it good practice to read the data back after saving?
+-   After running this code, check your `data` folder - what file was created?
+-   Why is it good practice to read the data back after saving?
 
 *Write your thoughts here:*
 
+-   a csv file was created
 
+-   write_csv() saves tibbles to CSV format
 
-### Selecting and Modifying Values  
+-   Always verify your data after saving/loading
 
-#### Working with Vectors  
+-   Check the file with Excel or text editor
+
+-   Other packages: readxl for Excel, haven for SPSS/Stata
+
+### Selecting and Modifying Values
+
+#### Working with Vectors
 
 ```{r vector-indexing, eval=FALSE}
 # Vector indexing
@@ -418,8 +498,15 @@ seasons[-2]                  # Exclude second element
 seasons[c(T, T, F, F, F, T, T)]  # Logical indexing
 ```
 
+-   use \[\] for indexing
 
-#### Working with Matrices  
+-   Negative indices exclude elements
+
+-   Logical vectors select TRUE positions
+
+-   Assignment with \<- modifies elements
+
+#### Working with Matrices
 
 ```{r matrix-indexing, eval=FALSE}
 # Matrix indexing
@@ -432,14 +519,22 @@ m
 
 m[1:2, 1]                   # Rows 1-2, column 1
 m[, 1]                      # All rows, column 1
-m[, 1, drop = FALSE]        # Keep as matrix (don't drop dimension)
+m[, 1, drop = FALSE]        # Keep as matrix (don't drop dimension, preserves matrix structure)
 
 m[-2, ]                     # Exclude row 2
 m[-2, -c(2, 3)]            # Exclude row 2, columns 2-3
 m[c(T, F, T), ]            # Logical indexing for rows
 ```
 
-#### Working with Data Frames and Tibbles  
+-   Use \[row, column\] for matrix indexing
+
+-   Empty index means 'all' (e.g. \[,1\] : all rows, column 1)
+
+-   drop = FALSE preserves matrix structure
+
+-   Negative indices exclude rows/columns
+
+#### Working with Data Frames and Tibbles
 
 ```{r dataframe-indexing, eval=FALSE}
 # Data frame indexing
@@ -471,8 +566,15 @@ weather$temperature[2] <- 16  # Modify temperature value
 weather
 ```
 
+-   Tibbles preserve structure in indexing
 
-#### Working with Lists  
+-   pul() extracts vectors from tibbles
+
+-   \$ operator accesses columns by name
+
+-   Can modify specific elements directly
+
+#### Working with Lists
 
 ```{r list-indexing, eval=FALSE}
 # List indexing
@@ -499,10 +601,17 @@ nested_list$x3$y2 <- "house"  # Modify nested element
 nested_list
 ```
 
+-   use \[\[\]\] to extract list elements
 
-### Dealing with Missing Values  
+-   use \$ with named components
 
-#### Understanding NA  
+-   Chain \$ operators for nested lists
+
+-   \[\] returns list, \[\[\]\] returns element
+
+### Dealing with Missing Values
+
+#### Understanding NA
 
 ```{r missing-values, eval=FALSE}
 # Working with NA
@@ -522,14 +631,24 @@ sum(values, na.rm = TRUE)   # Remove missing values
 mean(values, na.rm = TRUE)  # Same for mean
 ```
 
+-   NA represents missing values
 
-# Data Wrangling with dplyr  
+-   Use is.na() to test for missing values
 
-## Introduction to dplyr  
+-   NA == NA returns NA, not TRUE
 
-Load the `babynames` dataset and explore the main dplyr verbs. Each verb performs a specific data manipulation task.
+-   Use na.rm = TRUE in functions to ignore missing values
 
-### Basic dplyr Operations  
+-   Missing values propagate through calculations
+
+# Data Wrangling with dplyr
+
+## Introduction to dplyr
+
+Load the `babynames` dataset and explore the main dplyr verbs.
+Each verb performs a specific data manipulation task.
+
+### Basic dplyr Operations
 
 ```{r dplyr-basics, eval=FALSE}
 library(babynames)
@@ -561,10 +680,9 @@ arrange(babynames, year, desc(prop))
 arrange(babynames, desc(year), desc(prop))
 ```
 
+## Using the Pipe `|>` Operator
 
-## Using the Pipe `|>` Operator  
-
-### Chaining Operations  
+### Chaining Operations
 
 ```{r pipe-operations, eval=FALSE}
 # Traditional nested approach (hard to read)
@@ -589,11 +707,9 @@ babynames |>
   head(10)
 ```
 
+## Summarising Data
 
-
-## Summarising Data  
-
-### Using `summarise()` and `group_by()`  
+### Using `summarise()` and `group_by()`
 
 ```{r summarising-data, eval=FALSE}
 # Basic summaries
@@ -632,9 +748,9 @@ babynames |>
   head(10)
 ```
 
-## Creating New Variables  
+## Creating New Variables
 
-### Using mutate()  
+### Using mutate()
 
 ```{r mutate-examples, eval=FALSE}
 # Add new columns
@@ -669,11 +785,12 @@ babynames |>
   head()
 ```
 
-# Practice Problems  
+# Practice Problems
 
-## Problem 1: Fix the Code  
+## Problem 1: Fix the Code
 
-What's wrong with the following code? Can you fix it?
+What's wrong with the following code?
+Can you fix it?
 
 ```{r fix-code, eval=FALSE, error=TRUE}
 # Problem code:
@@ -682,77 +799,97 @@ filter(babynames, name == Sea)
 ```
 
 **Your corrected code:**
+
 ```{r fix-code-student, eval=FALSE}
 # Fixed code here:
-
+filter(babynames, name == "Sea")
 
 ```
 
 **Your explanation of what was wrong:**
 
+Should use == instead of = and "" around the name.
 
+## Problem 2: Most Popular Names
 
-## Problem 2: Most Popular Names  
-
-Which name was the most popular for a single gender in a single year? Compare arranging by `prop` vs `n`.
+Which name was the most popular for a single gender in a single year?
+Compare arranging by `prop` vs `n`.
 
 ```{r popular-names-student, eval=FALSE}
 # Your code to find highest proportion:
+babynames |> 
+  filter(sex == "F") |> 
+  arrange(desc(prop)) |> 
+  head(5)
 
+babynames |> 
+  filter(sex == "M") |> 
+  arrange(desc(prop)) |> 
+  head(5)
 
 # Your code to find highest count:
+babynames |> 
+  filter(sex == "F") |> 
+  arrange(desc(n)) |> 
+  head(5)
 
+babynames |> 
+  filter(sex == "M") |> 
+  arrange(desc(n)) |> 
+  head(5)
 
 ```
 
-**Your analysis:**
-- Are the results the same? Why or why not?
+**Your analysis:** - Are the results the same?
+Why or why not?
 
-
-
-## Problem 3: Popular Girls Names in 2017  
+## Problem 3: Popular Girls Names in 2017
 
 Write a pipeline that will:
 
-1. Filter `babynames` to just girls born in 2017
-2. Select the name and n columns  
-3. Arrange so most popular names are at the top
+1.  Filter `babynames` to just girls born in 2017
+2.  Select the name and n columns\
+3.  Arrange so most popular names are at the top
 
 ```{r girls-2017-student, eval=FALSE}
 # Your pipeline here:
-
+babynames |> 
+  filter(sex == "F", year == 2017) |> 
+  select(name, n) |> 
+  head(10) # or arrange(desc(n))
 
 ```
 
+# Tidy Data with `tidyr`
 
-# Tidy Data with `tidyr`  
+## Understanding Tidy Data
 
-## Understanding Tidy Data  
-
-Explore the concept of tidy data using built-in datasets from `tidyr`. Each dataset represents the same information organised differently.
+Explore the concept of tidy data using built-in datasets from `tidyr`.
+Each dataset represents the same information organised differently.
 
 ```{r tidy-data-explore-student, eval=FALSE}
 # Load tidyr (part of tidyverse)
 library(tidyr)
 
 # Look at different representations of the same data
-table1
+table1 # tidy
 table2  
 table3
 table4a  # Cases
 table4b  # Population
 ```
 
-**Your analysis:**
-- Which table is "tidy"? Why?
+**Your analysis:** - Which table is "tidy"?
+Why?
 - What problems do you see with the other tables?
 - How would you describe what each row and column represents in each table?
 
 *Write your analysis here:*
 
+Only table1 is tidy.
+Tidy data should have only variables in a column and observations in rows.
 
-
-## Pivoting Data: Lengthening and Widening  
+## Pivoting Data: Lengthening and Widening
 
 ```{r pivoting-student, eval=FALSE}
 # Convert wide to long format
@@ -781,10 +918,9 @@ table4b_long <- table4b |>
 table4b_long
 ```
 
+## Practice with Real Data
 
-## Practice with Real Data  
-
-### Case study: Cholesterol Study  
+### Case study: Cholesterol Study
 
 Convert this dataset to long format and calculate summary statistics for each group.
 
@@ -798,7 +934,22 @@ cholesterol_data
 
 # Your tasks:
 # 1. Convert to long format
+cholesterol_tidy <- cholesterol_data |> 
+  pivot_longer(
+    cols = c('oat_bran_free', 'oat_bran'),
+    names_to = "diet",
+    values_to = "cholesterol"
+  )
+
 # 2. Calculate n, mean, and standard deviation for each diet group
+cholesterol_tidy |> 
+  group_by(diet) |> 
+  summarise(
+    n = n(),
+    mean = mean(cholesterol),
+    sd = sd(cholesterol),
+    .groups = "drop"
+  )
 ```
 
 ```{r cholesterol-solution-student, eval=FALSE}
@@ -810,55 +961,64 @@ cholesterol_data
 
 ```
 
-**Your interpretation:**
-- Which diet appears to result in lower cholesterol?
+**Your interpretation:** - Which diet appears to result in lower cholesterol?
 - What do the standard deviations tell you?
 
 *Write your analysis here:*
 
+Oat bran has a lower average of cholesterol content, however it has a higher variance indicating that there might be big deviations.
 
+## Advanced Tidy Data Problems
 
-## Advanced Tidy Data Problems  
+Sketch out the process to calculate the `rate` for `table2` and `table3`.
+You need to:
 
-Sketch out the process to calculate the `rate` for `table2` and `table3`. You need to:
-
-a. Extract TB cases per country per year
-b. Extract matching population per country per year  
-c. Divide cases by population, multiply by 10000
-d. Store back in appropriate place
+a.  Extract TB cases per country per year
+b.  Extract matching population per country per year\
+c.  Divide cases by population, multiply by 10000
+d.  Store back in appropriate place
 
 **Hint:** For `table3`, you may find the function `separate_wider_delim` helpful.
 
 ```{r calculate-rates-student, eval=FALSE}
 # Your approach for table2:
 
-
+table2 |> 
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  ) |> 
+  mutate (rate = cases / population * 10000) 
+  
 # Your approach for table3:
-
+table3 |> 
+  separate_wider_delim(
+    cols = rate,
+    delim = "/",
+    names = c("cases", "population")
+  ) |> 
+  mutate(
+    cases = as.numeric(cases),
+    population = as.numeric(population),
+    rate = cases / population * 10000
+  )
 
 ```
 
-**Your explanation:**
-- What's the main challenge with each table format?
+**Your explanation:** - What's the main challenge with each table format?
 - Which approach was easier to implement?
 
 *Write your thoughts here:*
 
+# Final Reflection
 
-
-# Final Reflection  
-
-**What did you learn?**
-- Which concepts were most challenging?
+**What did you learn?** - Which concepts were most challenging?
 - Which dplyr functions do you think you'll use most often?
 - How has your understanding of "tidy data" changed?
 
 *Write your reflections here:*
 
-
-
-**Next steps:**
-- What would you like to explore further?
+**Next steps:** - What would you like to explore further?
 - How might you apply these skills to your own data?
 
 *Write your thoughts here:*
